@@ -574,7 +574,7 @@ class CurriculumDataSource {
         options: ['6 rays', '7 rays', '8 rays', '10 rays'],
         correctIndex: 2,
         explanation: 'The sun has 8 rays, representing the first 8 provinces that rose against Spanish rule.',
-        imageKeyword: 'sun',
+        imageKeyword: 'philippine flag',
         subject: 'Philippine History',
         grade: grade,
         difficulty: difficulty.id,
