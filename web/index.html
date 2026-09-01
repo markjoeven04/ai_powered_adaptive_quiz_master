@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="$FLUTTER_BASE_HREF">
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="BrightSpark Self-Review - AI-Powered Adaptive Quiz Master for K-12">
+  <meta name="theme-color" content="#0058BE">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="BrightSpark">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>BrightSpark Self-Review</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Quicksand:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body, html {
+      background-color: #f8f9ff;
+      color: #0b1c30;
+      font-family: 'Nunito Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* Hide any default progress indicators */
+    flutter-view {
+      width: 100%;
+      height: 100%;
+    }
+    .loading-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      inset: 0;
+      background-color: #f8f9ff;
+      z-index: 999;
+      transition: opacity 0.4s ease-out;
+    }
+    .splash-card {
+      width: 120px;
+      height: 120px;
+      background: #ffffff;
+      border-radius: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 30px rgba(0, 88, 190, 0.12);
+      margin-bottom: 24px;
+    }
+    .splash-card img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+    }
+    .splash-title {
+      font-family: 'Quicksand', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: #0b1c30;
+      margin-bottom: 6px;
+    }
+    .splash-title span {
+      color: #0058be;
+    }
+    .splash-tagline {
+      font-size: 15px;
+      color: #424754;
+      margin-bottom: 32px;
+    }
+    .progress-bar-wrap {
+      width: 180px;
+      height: 6px;
+      background: #dce9ff;
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+    }
+    .progress-bar-fill {
+      width: 50%;
+      height: 100%;
+      background: #0058be;
+      border-radius: 999px;
+      animation: indeterminate 1.5s infinite ease-in-out;
+    }
+    @keyframes indeterminate {
+      0% { transform: translateX(-100%); width: 30%; }
+      50% { transform: translateX(50%); width: 60%; }
+      100% { transform: translateX(200%); width: 30%; }
+    }
+  </style>
+</head>
+<body>
+  <div id="initial-splash" class="loading-container">
+    <div class="splash-card">
+      <img src="assets/assets/images/logo_spark.png" onerror="this.style.display='none'" alt="BrightSpark">
+    </div>
+    <h1 class="splash-title">BrightSpark <span>Self-Review</span></h1>
+    <p class="splash-tagline">AI-Powered Adaptive Learning</p>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill"></div>
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener('flutter-first-frame', function () {
+      var splash = document.getElementById('initial-splash');
+      if (splash) {
+        splash.style.opacity = '0';
+        setTimeout(function () {
+          splash.remove();
+        }, 400);
+      }
+    });
+  </script>
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
