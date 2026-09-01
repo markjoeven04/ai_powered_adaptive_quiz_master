@@ -86,22 +86,26 @@ class GeminiAIService {
       ),
     );
 
+    final guideline = _getGradeLevelCurriculumGuideline(grade, subject, difficulty);
+
     final prompt = '''
-You are an expert curriculum designer and educator specializing in the Philippine K-12 Basic Education Curriculum for Grade $grade.
-Create a comprehensive, engaging self-review quiz of exactly $count multiple-choice questions for the following specifications:
+You are an expert educator and child development specialist in the Philippine K-12 Basic Education Curriculum.
+Create a supportive, perfectly calibrated self-review quiz of exactly $count multiple-choice questions for:
 
 - Subject: ${subject.displayName}
-- Grade Level: Grade $grade (Philippine K-12 standard)
-- Difficulty Level: ${difficulty.title} (${difficulty.subtitle})
+- Grade Level: Grade $grade
+- Difficulty: ${difficulty.title} (${difficulty.subtitle})
 
-Requirements for each question:
-1. "prompt": Clear, age-appropriate question statement for Grade $grade.
-2. "options": Exactly 4 distinct multiple-choice options (A, B, C, D) as strings.
+$guideline
+
+STRICT REQUIREMENTS FOR EVERY QUESTION:
+1. "prompt": Clear, age-appropriate question statement for a Grade $grade child. DO NOT make it overly difficult or use words above Grade $grade reading level.
+2. "options": Exactly 4 distinct, plausible multiple-choice options (A, B, C, D) as strings.
 3. "correct_index": The 0-based integer index of the correct option (0, 1, 2, or 3).
-4. "explanation": A thorough, supportive educational explanation stating why the correct answer is right and why it matters.
-5. "keyword": A specific 1-2 word visual noun directly representing the exact core concept of the question (e.g. "volcano", "photosynthesis", "fraction", "triangle", "heart", "jose rizal", "katipunan", "gravity", "butterfly", "reading", "circuits", "dna", "telescope", "algebra", "weather").
+4. "explanation": A warm, encouraging, simple explanation of why the answer is correct so the student learns positively.
+5. "keyword": A specific 1-2 word visual noun representing the core topic (e.g. "volcano", "photosynthesis", "fraction", "triangle", "heart", "jose rizal", "katipunan", "gravity", "butterfly", "reading", "circuits", "dna", "telescope", "algebra", "weather").
 
-Return the output as a valid JSON array of question objects:
+Return ONLY a valid JSON array of question objects:
 [
   {
     "prompt": "...",
@@ -175,4 +179,50 @@ Return the output as a valid JSON array of question objects:
     }
     return text.trim();
   }
+
+  String _getGradeLevelCurriculumGuideline(int grade, Subject subject, QuizDifficulty difficulty) {
+    if (grade <= 3) {
+      return '''
+CRITICAL PEDAGOGICAL CALIBRATION FOR PRIMARY GRADE $grade (Ages 6-8):
+- TARGET AUDIENCE: Young elementary pupil in Grade $grade.
+- VOCABULARY: Must be SHORT, CLEAR, SIMPLE words that a 6-8 year old understands. No complex terminology!
+- SUBJECT COMPETENCIES:
+  * Science: Five senses (eyes see, ears hear, nose smells), basic body parts, animals & sounds/homes (birds fly, fish swim), living vs non-living, basic plant parts (root, stem, leaf, flower), weather (sunny, rainy), day and night. (DO NOT ask about cells, chemical symbols, taxonomy, gravity formulas, or high school science).
+  * Math: Counting numbers 1-100, simple addition and subtraction (e.g. 5 + 3 = 8, 12 - 4 = 8), basic shapes (circle, triangle, square, rectangle), identifying Philippine coins/bills, telling time by the hour (e.g. 3:00). (DO NOT ask about fractions, algebra, formulas, or multi-step word problems).
+  * Philippine History / Araling Panlipunan: Philippine flag colors (blue, red, white, yellow sun & stars), national symbols (carabao, mango, Philippine eagle, baro't saya), family, community helpers (teacher, doctor, nurse, firefighter, police). (DO NOT ask about historical treaties, dates, 1896 battle plans, or legislation).
+  * English: Rhyming words (cat/bat), alphabet phonics, naming words (nouns), action words (verbs), simple descriptive words (colors, big/small, happy/sad), opposites (hot/cold, up/down).
+- DIFFICULTY SCALING FOR ${difficulty.title}:
+  * Easy: Direct visual recognition & simple recall.
+  * Medium: Standard grade $grade classroom level.
+  * Hard: Slight challenge (e.g. simple 1-step word problem with small numbers).
+''';
+    } else if (grade <= 6) {
+      return '''
+CRITICAL PEDAGOGICAL CALIBRATION FOR INTERMEDIATE GRADE $grade (Ages 9-11):
+- TARGET AUDIENCE: Intermediate elementary pupil in Grade $grade.
+- SUBJECT COMPETENCIES:
+  * Science: Digestive and respiratory systems basics, plant photosynthesis basics, simple food chains, water cycle, 3 states of matter (solid, liquid, gas), simple machines, planets in the solar system, typhoon & earthquake safety.
+  * Math: Multiplication & division, basic fractions (1/2, 1/4, 3/4), basic decimals, perimeter & area of rectangles/triangles, simple bar graphs, measurement conversions.
+  * Philippine History: Philippine major islands (Luzon, Visayas, Mindanao), national heroes (Jose Rizal, Andres Bonifacio, Lapu-Lapu), Spanish period overview, Katipunan overview.
+  * English: Parts of speech (nouns, pronouns, verbs, adjectives, adverbs), subject-verb agreement, synonyms/antonyms, compound sentences, main idea.
+''';
+    } else if (grade <= 10) {
+      return '''
+CRITICAL PEDAGOGICAL CALIBRATION FOR JUNIOR HIGH SCHOOL GRADE $grade (Ages 12-15):
+- TARGET AUDIENCE: Junior high school student in Grade $grade.
+- SUBJECT COMPETENCIES:
+  * Science: Integrated science - cells, genetics, forces & motion, periodic table foundations, earth science, climate, ecosystems.
+  * Math: Algebra (linear equations, polynomials), geometry (angles, triangles, Pythagorean theorem), coordinate plane, basic statistics & probability.
+  * Philippine History: Pre-colonial barangays, Spanish colonization, 1896 Revolution, American & Japanese eras, Philippine Constitution.
+  * English: Figurative language (simile, metaphor, personification), grammar & syntax, active/passive voice, reading comprehension.
+''';
+    } else {
+      return '''
+CRITICAL PEDAGOGICAL CALIBRATION FOR SENIOR HIGH SCHOOL GRADE $grade (Ages 16-18):
+- TARGET AUDIENCE: Senior high school student in Grade $grade.
+- Core curriculum: General Mathematics, General Biology/Chemistry/Physics, Philippine Politics and Governance, English for Academic Purposes.
+''';
+    }
+  }
 }
+
