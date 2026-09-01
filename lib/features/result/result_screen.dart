@@ -5,8 +5,9 @@ import '../../core/constants/app_typography.dart';
 import '../../core/constants/app_assets.dart';
 import '../../core/constants/app_strings.dart';
 import '../../core/models/quiz_session_model.dart';
+import '../../core/providers/app_providers.dart';
 import '../navigation/main_nav_shell.dart';
-import '../quiz/quiz_controller.dart';
+
 import '../quiz/quiz_screen.dart';
 import 'widgets/confetti_overlay.dart';
 

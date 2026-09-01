@@ -139,7 +139,8 @@ class AboutModal extends StatelessWidget {
                           icon: Icons.psychology_rounded,
                           color: AppColors.primary,
                           title: 'Adaptive AI Engine',
-                          description: 'Dynamically scales question difficulty based on student performance using Google Gemini.',
+                          description: 'Dynamically scales question difficulty based on student performance using advanced AI.',
+
                         ),
                         const SizedBox(height: 12),
                         _buildFeatureRow(

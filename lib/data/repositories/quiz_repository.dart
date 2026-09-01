@@ -10,29 +10,38 @@ class QuizRepository {
 
   QuizRepository(this._aiService);
 
-  /// Loads 20 tailored quiz questions using Gemini AI first, with seamless fallback
-  Future<List<QuizQuestion>> getQuizQuestions({
+  /// Generates 20 pure dynamic questions strictly from Gemini AI
+  /// Never falls back silently to local data. Throws if offline/failed.
+  Future<List<QuizQuestion>> getAiQuizQuestions({
     required Subject subject,
     required int grade,
     required QuizDifficulty difficulty,
     int count = 20,
   }) async {
-    try {
-      developer.log('QuizRepository: Requesting Gemini AI questions for Grade $grade ${subject.displayName} ($difficulty)...');
-      final aiQuestions = await _aiService.generateQuestions(
-        subject: subject,
-        grade: grade,
-        difficulty: difficulty,
-        count: count,
-      );
-      if (aiQuestions.isNotEmpty) {
-        return aiQuestions;
-      }
-    } catch (e) {
-      developer.log('QuizRepository: AI generation fallback triggered: $e');
+    developer.log('QuizRepository: Requesting 100% Pure Gemini AI questions...');
+    final aiQuestions = await _aiService.generateQuestions(
+      subject: subject,
+      grade: grade,
+      difficulty: difficulty,
+      count: count,
+    );
+
+    if (aiQuestions.isNotEmpty) {
+      return aiQuestions;
     }
 
-    // Fallback to high-quality authentic K-12 curriculum database
+    throw Exception('No questions returned by Gemini AI.');
+  }
+
+  /// Explicitly loads 20 questions from the official DepEd Curriculum Bank
+  /// Only called when the user confirms they want to practice offline.
+  List<QuizQuestion> getDepEdCurriculumQuestions({
+    required Subject subject,
+    required int grade,
+    required QuizDifficulty difficulty,
+    int count = 20,
+  }) {
+    developer.log('QuizRepository: Loading questions from DepEd Curriculum Bank...');
     return CurriculumDataSource.getQuestions(
       subject: subject,
       grade: grade,

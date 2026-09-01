@@ -8,6 +8,8 @@ import '../services/storage_service.dart';
 import '../services/gemini_ai_service.dart';
 import '../../data/repositories/quiz_repository.dart';
 import '../../data/repositories/user_repository.dart';
+import '../../features/quiz/quiz_controller.dart';
+import '../../features/quiz/quiz_state.dart';
 
 // Storage Service Provider (Overridden in main)
 final storageServiceProvider = Provider<StorageService>((ref) {
@@ -100,8 +102,13 @@ final quizHistoryProvider = StateNotifierProvider<QuizHistoryNotifier, List<Quiz
 
 // Badges Provider
 final badgesProvider = Provider<List<BadgeModel>>((ref) {
-  // Watch userProfile to automatically recompute badges when state changes
   ref.watch(userProfileProvider);
   final repo = ref.watch(userRepositoryProvider);
   return repo.getBadges();
+});
+
+// Active Quiz Provider
+final activeQuizProvider = StateNotifierProvider<ActiveQuizNotifier, ActiveQuizState>((ref) {
+  final repo = ref.watch(quizRepositoryProvider);
+  return ActiveQuizNotifier(repo, ref);
 });

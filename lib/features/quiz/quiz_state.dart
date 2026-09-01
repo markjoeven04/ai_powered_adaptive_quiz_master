@@ -6,6 +6,8 @@ import '../../core/models/quiz_session_model.dart';
 class ActiveQuizState {
   final bool isLoading;
   final String? errorMessage;
+  final bool isOfflineFallbackPrompt;
+  final bool isAiGenerated;
   final Subject subject;
   final int grade;
   final QuizDifficulty difficulty;
@@ -21,6 +23,8 @@ class ActiveQuizState {
   const ActiveQuizState({
     this.isLoading = false,
     this.errorMessage,
+    this.isOfflineFallbackPrompt = false,
+    this.isAiGenerated = true,
     required this.subject,
     required this.grade,
     required this.difficulty,
@@ -55,6 +59,8 @@ class ActiveQuizState {
   ActiveQuizState copyWith({
     bool? isLoading,
     String? errorMessage,
+    bool? isOfflineFallbackPrompt,
+    bool? isAiGenerated,
     Subject? subject,
     int? grade,
     QuizDifficulty? difficulty,
@@ -71,6 +77,8 @@ class ActiveQuizState {
     return ActiveQuizState(
       isLoading: isLoading ?? this.isLoading,
       errorMessage: errorMessage,
+      isOfflineFallbackPrompt: isOfflineFallbackPrompt ?? this.isOfflineFallbackPrompt,
+      isAiGenerated: isAiGenerated ?? this.isAiGenerated,
       subject: subject ?? this.subject,
       grade: grade ?? this.grade,
       difficulty: difficulty ?? this.difficulty,

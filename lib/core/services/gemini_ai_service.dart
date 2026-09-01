@@ -77,33 +77,36 @@ class GeminiAIService {
     required QuizDifficulty difficulty,
     required int count,
   }) async {
+    final sessionSeed = DateTime.now().millisecondsSinceEpoch % 100000;
+
     final model = GenerativeModel(
-      model: 'gemini-1.5-flash',
+      model: 'gemini-3.6-flash',
       apiKey: apiKey,
       generationConfig: GenerationConfig(
-        temperature: 0.7,
+        temperature: 0.8,
         responseMimeType: 'application/json',
       ),
     );
 
+
     final guideline = _getGradeLevelCurriculumGuideline(grade, subject, difficulty);
 
     final prompt = '''
-You are an expert educator and child development specialist in the Philippine K-12 Basic Education Curriculum.
-Create a supportive, perfectly calibrated self-review quiz of exactly $count multiple-choice questions for:
+You are an expert curriculum developer specializing in the Philippine Department of Education (DepEd) K-12 Basic Education Curriculum.
+Generate a dynamic, non-repetitive, high-engagement set of exactly $count multiple-choice questions for:
 
 - Subject: ${subject.displayName}
-- Grade Level: Grade $grade
-- Difficulty: ${difficulty.title} (${difficulty.subtitle})
+- Grade Level: Grade $grade (Target Age: ${grade + 5} to ${grade + 6} years old)
+- Difficulty Tier: ${difficulty.title} (${difficulty.subtitle})
+- Random Session Seed: #$sessionSeed
 
 $guideline
 
-STRICT REQUIREMENTS FOR EVERY QUESTION:
-1. "prompt": Clear, age-appropriate question statement for a Grade $grade child. DO NOT make it overly difficult or use words above Grade $grade reading level.
-2. "options": Exactly 4 distinct, plausible multiple-choice options (A, B, C, D) as strings.
-3. "correct_index": The 0-based integer index of the correct option (0, 1, 2, or 3).
-4. "explanation": A warm, encouraging, simple explanation of why the answer is correct so the student learns positively.
-5. "keyword": A specific 1-2 word visual noun representing the core topic (e.g. "volcano", "photosynthesis", "fraction", "triangle", "heart", "jose rizal", "katipunan", "gravity", "butterfly", "reading", "circuits", "dna", "telescope", "algebra", "weather").
+PEDAGOGICAL & DIVERSITY RULES:
+1. VARIETY GUARANTEE: Ensure every single question tests a DIFFERENT topic/competency within Grade $grade ${subject.displayName}. Do NOT repeat questions or ask about the same object twice.
+2. ACCURATE DIFFICULTY: Calibrate strictly to what is taught at Grade $grade level in Philippine schools.
+3. CLEAR OPTIONS: Provide 4 distinct options where only 1 is undeniably correct and 3 are plausible distractors.
+4. "keyword": Provide a specific 1-2 word visual noun matching the question's core subject (e.g. "philippine flag", "jose rizal", "carabao", "philippine eagle", "plant", "sun", "heart", "brain", "triangle", "apple", "fraction", "calendar", "rain", "puppy").
 
 Return ONLY a valid JSON array of question objects:
 [
@@ -116,6 +119,7 @@ Return ONLY a valid JSON array of question objects:
   }
 ]
 ''';
+
 
     final response = await model.generateContent([Content.text(prompt)]);
     final responseText = response.text;

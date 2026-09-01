@@ -18,7 +18,7 @@ class ActiveQuizNotifier extends StateNotifier<ActiveQuizState> {
           studentName: '',
         ));
 
-  /// Initializes and generates 20 questions tailored to the student
+  /// Pure Gemini AI Generation (Default)
   Future<void> startQuiz({
     required Subject subject,
     required int grade,
@@ -35,10 +35,12 @@ class ActiveQuizNotifier extends StateNotifier<ActiveQuizState> {
       score: 0,
       answers: [],
       questions: [],
+      isAiGenerated: true,
+      isOfflineFallbackPrompt: false,
     );
 
     try {
-      final questions = await _quizRepository.getQuizQuestions(
+      final questions = await _quizRepository.getAiQuizQuestions(
         subject: subject,
         grade: grade,
         difficulty: difficulty,
@@ -48,13 +50,47 @@ class ActiveQuizNotifier extends StateNotifier<ActiveQuizState> {
       state = state.copyWith(
         isLoading: false,
         questions: questions,
+        isAiGenerated: true,
+        isOfflineFallbackPrompt: false,
       );
     } catch (e) {
+      // Offline / Generation Failed: Prompt user with Option to retry or practice offline
       state = state.copyWith(
         isLoading: false,
-        errorMessage: 'Failed to load questions. Please check your connection.',
+        isOfflineFallbackPrompt: true,
+        errorMessage: 'Internet connection required to generate AI questions. Please connect to Wi-Fi or mobile data.',
       );
     }
+  }
+
+  /// Explicit user confirmation to practice using the DepEd Curriculum Bank
+  void loadOfflineDepEdCurriculumBank() {
+    state = state.copyWith(isLoading: true, isOfflineFallbackPrompt: false);
+    
+    final questions = _quizRepository.getDepEdCurriculumQuestions(
+      subject: state.subject,
+      grade: state.grade,
+      difficulty: state.difficulty,
+      count: 20,
+    );
+
+    state = state.copyWith(
+      isLoading: false,
+      questions: questions,
+      isAiGenerated: false,
+      isOfflineFallbackPrompt: false,
+      errorMessage: null,
+    );
+  }
+
+  /// Re-attempts pure Gemini AI generation
+  Future<void> retryAiGeneration() async {
+    await startQuiz(
+      subject: state.subject,
+      grade: state.grade,
+      difficulty: state.difficulty,
+      studentName: state.studentName,
+    );
   }
 
   void selectOption(int index) {
@@ -63,48 +99,31 @@ class ActiveQuizNotifier extends StateNotifier<ActiveQuizState> {
   }
 
   void submitAnswer() {
-    if (state.selectedOptionIndex == null || state.isAnswerSubmitted) return;
     final currentQ = state.currentQuestion;
-    if (currentQ == null) return;
+    if (currentQ == null || state.selectedOptionIndex == null || state.isAnswerSubmitted) {
+      return;
+    }
 
     final isCorrect = state.selectedOptionIndex == currentQ.correctIndex;
-    final updatedScore = isCorrect ? state.score + 1 : state.score;
+    final newScore = isCorrect ? state.score + 1 : state.score;
 
-    final answerDetail = UserAnswerDetail(
+    final detail = UserAnswerDetail(
       question: currentQ,
       selectedIndex: state.selectedOptionIndex!,
       isCorrect: isCorrect,
     );
 
-    final updatedAnswers = List<UserAnswerDetail>.from(state.answers)..add(answerDetail);
 
     state = state.copyWith(
       isAnswerSubmitted: true,
-      score: updatedScore,
-      answers: updatedAnswers,
+      score: newScore,
+      answers: [...state.answers, detail],
     );
   }
 
-  Future<void> nextQuestion() async {
+  void nextQuestion() {
     if (state.isLastQuestion) {
-      // Finalize Quiz Session
-      final result = QuizSessionResult(
-        id: 'session_${DateTime.now().millisecondsSinceEpoch}',
-        studentName: state.studentName.isEmpty ? 'Student' : state.studentName,
-        subject: state.subject,
-        grade: state.grade,
-        difficulty: state.difficulty,
-        totalQuestions: state.questions.length,
-        score: state.score,
-        completedAt: DateTime.now(),
-        answers: state.answers,
-      );
-
-      // Record in local history & update stats
-      await _ref.read(quizHistoryProvider.notifier).addResult(result);
-      _ref.read(userProfileProvider.notifier).refresh();
-
-      state = state.copyWith(sessionResult: result);
+      _finishQuiz();
     } else {
       state = state.copyWith(
         currentIndex: state.currentIndex + 1,
@@ -114,18 +133,23 @@ class ActiveQuizNotifier extends StateNotifier<ActiveQuizState> {
     }
   }
 
-  void resetQuiz() {
-    startQuiz(
+  void _finishQuiz() {
+    final session = QuizSessionResult(
+      id: 'session_${DateTime.now().millisecondsSinceEpoch}',
+      studentName: state.studentName.isEmpty ? 'Student' : state.studentName,
       subject: state.subject,
       grade: state.grade,
       difficulty: state.difficulty,
-      studentName: state.studentName,
+      score: state.score,
+      totalQuestions: state.totalQuestions,
+      answers: state.answers,
+      completedAt: DateTime.now(),
+    );
+
+    _ref.read(storageServiceProvider).saveQuizSession(session);
+
+    state = state.copyWith(
+      sessionResult: session,
     );
   }
 }
-
-final activeQuizProvider =
-    StateNotifierProvider<ActiveQuizNotifier, ActiveQuizState>((ref) {
-  final quizRepo = ref.watch(quizRepositoryProvider);
-  return ActiveQuizNotifier(quizRepo, ref);
-});

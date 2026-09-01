@@ -7,8 +7,8 @@ import '../../core/constants/app_strings.dart';
 import '../../core/models/difficulty_enum.dart';
 import '../../core/models/subject_enum.dart';
 import '../../core/providers/app_providers.dart';
-import '../quiz/quiz_controller.dart';
 import '../quiz/quiz_screen.dart';
+
 import 'widgets/difficulty_card.dart';
 
 class DifficultyScreen extends ConsumerWidget {

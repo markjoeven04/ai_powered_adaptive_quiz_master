@@ -57,4 +57,32 @@ class QuizQuestion {
       difficulty: json['difficulty'] as String? ?? 'medium',
     );
   }
+
+  QuizQuestion copyWith({
+    String? id,
+    String? prompt,
+    List<String>? options,
+    int? correctIndex,
+    String? explanation,
+    String? imageUrl,
+    String? imageKeyword,
+    String? subject,
+    int? grade,
+    String? difficulty,
+  }) {
+    return QuizQuestion(
+      id: id ?? this.id,
+      prompt: prompt ?? this.prompt,
+      options: options ?? this.options,
+      correctIndex: correctIndex ?? this.correctIndex,
+      explanation: explanation ?? this.explanation,
+      imageUrl: imageUrl ?? this.imageUrl,
+      imageKeyword: imageKeyword ?? this.imageKeyword,
+      subject: subject ?? this.subject,
+      grade: grade ?? this.grade,
+      difficulty: difficulty ?? this.difficulty,
+    );
+  }
 }
+
+

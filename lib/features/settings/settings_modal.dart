@@ -165,11 +165,11 @@ class _SettingsModalState extends ConsumerState<SettingsModal> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Gemini AI Engine Active',
+                        Text('Adaptive AI Engine Active',
                             style: AppTypography.labelMd(color: AppColors.primary)),
                         const SizedBox(height: 2),
                         Text(
-                          'Dual-key automatic fallback enabled for unlimited K-12 quizzes.',
+                          'Automatic high-speed generation enabled for dynamic K-12 quizzes.',
                           style: AppTypography.bodyMd(
                             color: AppColors.onSurfaceVariant,
                           ),
@@ -182,8 +182,9 @@ class _SettingsModalState extends ConsumerState<SettingsModal> {
             ),
             const SizedBox(height: 20),
 
-            // Optional Custom Gemini API Key
-            Text('Custom Gemini API Key (Optional)', style: AppTypography.labelMd()),
+            // Optional Custom AI API Key
+            Text('Custom AI API Key (Optional)', style: AppTypography.labelMd()),
+
             const SizedBox(height: 8),
             TextField(
               controller: _apiKeyController,
