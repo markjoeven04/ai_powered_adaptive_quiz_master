@@ -66,33 +66,38 @@ class SubjectCard extends StatelessWidget {
 
               // Card Content
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
                 child: Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        width: 58,
-                        height: 58,
-                        decoration: BoxDecoration(
-                          color: subject.containerColor,
-                          borderRadius: BorderRadius.circular(18),
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: subject.containerColor,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Icon(
+                            subject.iconData,
+                            size: 26,
+                            color: subject.iconColor,
+                          ),
                         ),
-                        child: Icon(
-                          subject.iconData,
-                          size: 30,
-                          color: subject.iconColor,
+                        const SizedBox(height: 8),
+                        Text(
+                          subject.displayName,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTypography.labelMd(
+                            color: isSelected ? AppColors.primary : AppColors.onSurface,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        subject.displayName,
-                        style: AppTypography.labelMd(
-                          color: isSelected ? AppColors.primary : AppColors.onSurface,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

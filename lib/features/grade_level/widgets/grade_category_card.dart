@@ -76,10 +76,13 @@ class GradeCategoryCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(16),
                         ),
                       ),
-                      child: Text(
-                        'Grade $grade',
-                        style: AppTypography.labelMd(
-                          color: isSelected ? Colors.white : category.color,
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          'Grade $grade',
+                          style: AppTypography.labelMd(
+                            color: isSelected ? Colors.white : category.color,
+                          ),
                         ),
                       ),
                     ),

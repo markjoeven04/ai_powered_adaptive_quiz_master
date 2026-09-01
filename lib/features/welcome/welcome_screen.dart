@@ -205,7 +205,7 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                 crossAxisCount: 2,
                 crossAxisSpacing: 14,
                 mainAxisSpacing: 14,
-                childAspectRatio: 1.15,
+                childAspectRatio: 1.05,
                 children: Subject.values.map((subject) {
                   return SubjectCard(
                     subject: subject,

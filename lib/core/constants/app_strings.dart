@@ -9,7 +9,7 @@ class AppStrings {
   static const String welcomeSubtitle = "Let's get ready for some focused play.";
   static const String namePrompt = "What's your name?";
   static const String namePlaceholder = 'Type your name here...';
-  static const String pickFavorites = 'Pick your favorites to start:';
+  static const String pickFavorites = 'Choose a Subject to Review:';
   static const String letsGo = "Let's Go!";
 
   // Grade Level Screen
