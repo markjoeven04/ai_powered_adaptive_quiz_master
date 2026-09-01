@@ -208,12 +208,15 @@ class ResultScreen extends ConsumerWidget {
                                         : AppColors.primaryContainer.withValues(alpha: 0.12),
                                     borderRadius: BorderRadius.circular(999),
                                   ),
-                                  child: Text(
-                                    '${result.percentage.toStringAsFixed(0)}% Accuracy • Grade ${result.grade} ${result.subject.displayName}',
-                                    style: AppTypography.labelSm(
-                                      color: isHighScorer
-                                          ? AppColors.tertiaryContainer
-                                          : AppColors.primary,
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      '${result.percentage.toStringAsFixed(0)}% Accuracy • Grade ${result.grade} ${result.subject.displayName}',
+                                      style: AppTypography.labelSm(
+                                        color: isHighScorer
+                                            ? AppColors.tertiaryContainer
+                                            : AppColors.primary,
+                                      ),
                                     ),
                                   ),
                                 ),
