@@ -46,7 +46,7 @@ class BadgeModel {
         const BadgeModel(
           id: 'first_quiz',
           title: 'First Step',
-          description: 'Completed your first self-review quiz session!',
+          description: 'Completed your first Bright Spark quiz session!',
           icon: Icons.rocket_launch_rounded,
           color: Color(0xFF0058BE),
         ),

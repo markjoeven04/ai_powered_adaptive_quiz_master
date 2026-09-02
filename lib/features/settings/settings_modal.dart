@@ -127,7 +127,7 @@ class _SettingsModalState extends ConsumerState<SettingsModal> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.info_outline_rounded, color: AppColors.primary),
-                  tooltip: 'About BrightSpark',
+                  tooltip: 'About Bright Spark Quiz Master',
                   onPressed: () {
                     Navigator.of(context).pop();
                     AboutModal.show(context);
@@ -226,7 +226,7 @@ class _SettingsModalState extends ConsumerState<SettingsModal> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('About BrightSpark Self-Review', style: AppTypography.labelMd()),
+                          Text('About Bright Spark Quiz Master', style: AppTypography.labelMd()),
                           Text('Version 1.0.0 • Architecture & Features', style: AppTypography.bodyMd(color: AppColors.onSurfaceVariant)),
                         ],
                       ),

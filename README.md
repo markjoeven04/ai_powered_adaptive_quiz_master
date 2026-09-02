@@ -1,7 +1,7 @@
-# ⚡ BrightSpark Self-Review
-### *AI-Powered Adaptive Quiz Master for K-12*
+# ⚡ Bright Spark Quiz Master
+### *AI-Powered Adaptive Learning Companion for K-12*
 
-> **BrightSpark Self-Review** is an intelligent, gamified learning companion built with Flutter and Riverpod. Powered by **Google Gemini AI**, it dynamically generates grade-calibrated, adaptive review questions with instant pedagogical feedback for K-12 students across all primary and secondary grade levels.
+> **Bright Spark Quiz Master** is an intelligent, gamified learning companion built with Flutter and Riverpod. Powered by **Google Gemini AI**, it dynamically generates grade-calibrated, adaptive review questions with instant pedagogical feedback for K-12 students across all primary and secondary grade levels.
 >
 > 👨‍💻 **Lead Developer & Creator**: **Mark Joeven Orpilla**
 
@@ -12,8 +12,8 @@
 ### 1. Problem It Solves
 Traditional quiz apps rely on static, repetitive question banks that quickly become stale or fail to match a student's actual learning pace. Students get either frustrated by questions that are too hard or bored by questions that are too easy.
 
-### 2. The BrightSpark Solution ("Focused Play")
-BrightSpark merges **academic rigor** with the engagement of **tactile gameplay**:
+### 2. The Bright Spark Solution ("Focused Play")
+Bright Spark Quiz Master merges **academic rigor** with the engagement of **tactile gameplay**:
 - **Adaptive AI Engine**: Dynamically generates fresh multiple-choice questions aligned with standard K-12 curricula (Primary G1–G3, Intermediate G4–G6, Junior High G7–G10, and Senior High G11–G12).
 - **Difficulty Calibration**: Supports **Easy**, **Medium**, **Hard**, and **AI Adaptive Mode** (which scales difficulty in real-time based on consecutive right/wrong answers).
 - **Pedagogical Explanations**: Every question includes a rich concept explanation and rationale so students learn *why* an answer is correct immediately.

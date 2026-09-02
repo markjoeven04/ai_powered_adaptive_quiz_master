@@ -1,11 +1,12 @@
 class AppStrings {
-  static const String appName = 'BrightSpark';
-  static const String appSubtitle = 'Self-Review';
+  static const String appName = 'Bright Spark';
+  static const String appSubtitle = 'Quiz Master';
+  static const String appFullName = 'Bright Spark Quiz Master';
   static const String appTagline = 'Master Your Path.';
   static const String preparingSession = 'Preparing your session...';
 
   // Welcome Screen
-  static const String welcomeTitle = 'Welcome to BrightSpark Self-Review!';
+  static const String welcomeTitle = 'Welcome to Bright Spark Quiz Master!';
   static const String welcomeSubtitle = "Let's get ready for some focused play.";
   static const String namePrompt = "What's your name?";
   static const String namePlaceholder = 'Type your name here...';

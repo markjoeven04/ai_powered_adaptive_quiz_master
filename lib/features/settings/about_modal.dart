@@ -114,7 +114,7 @@ class AboutModal extends StatelessWidget {
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          'BrightSpark Self-Review is an intelligent, gamified learning companion engineered for K-12 students. It transforms self-directed study into an interactive adventure with real-time adaptive questions tailored to each learner\'s grade level, subject mastery, and pace.',
+                          'Bright Spark Quiz Master is an intelligent, gamified learning companion engineered for K-12 students. It transforms self-directed study into an interactive adventure with real-time adaptive questions tailored to each learner\'s grade level, subject mastery, and pace.',
                           style: AppTypography.bodyMd(color: AppColors.onSurfaceVariant),
                         ),
                       ],

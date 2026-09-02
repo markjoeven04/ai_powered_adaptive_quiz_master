@@ -32,6 +32,12 @@ class GeminiAIService {
     if (EnvConfig.geminiBackupApiKey.isNotEmpty && !keys.contains(EnvConfig.geminiBackupApiKey)) {
       keys.add(EnvConfig.geminiBackupApiKey);
     }
+    if (EnvConfig.geminiKey3.isNotEmpty && !keys.contains(EnvConfig.geminiKey3)) {
+      keys.add(EnvConfig.geminiKey3);
+    }
+    if (EnvConfig.geminiKey4.isNotEmpty && !keys.contains(EnvConfig.geminiKey4)) {
+      keys.add(EnvConfig.geminiKey4);
+    }
 
     return keys;
   }
@@ -44,12 +50,18 @@ class GeminiAIService {
     int count = 20,
   }) async {
     final keys = _getAvailableKeys();
+    if (keys.isEmpty) {
+      throw Exception('No Gemini API keys configured.');
+    }
+
     Exception? lastError;
 
-    for (final apiKey in keys) {
+    for (int i = 0; i < keys.length; i++) {
+      final apiKey = keys[i];
       if (apiKey.isEmpty) continue;
+      final keyLabel = 'Key #${i + 1} (...${apiKey.length > 6 ? apiKey.substring(apiKey.length - 4) : apiKey})';
       try {
-        developer.log('Attempting AI question generation with key ending in ...${apiKey.length > 6 ? apiKey.substring(apiKey.length - 4) : apiKey}');
+        developer.log('Attempting AI generation with $keyLabel');
         final questions = await _callGeminiWithKey(
           apiKey: apiKey,
           subject: subject,
@@ -58,16 +70,17 @@ class GeminiAIService {
           count: count,
         );
         if (questions.isNotEmpty) {
-          developer.log('Successfully generated ${questions.length} questions from Gemini AI!');
+          developer.log('Successfully generated ${questions.length} questions using $keyLabel!');
           return questions;
         }
       } catch (e, st) {
-        developer.log('Gemini API attempt failed with key: $e', error: e, stackTrace: st);
-        lastError = Exception(e.toString());
+        developer.log('Gemini attempt failed for $keyLabel: $e', error: e, stackTrace: st);
+        lastError = Exception('$keyLabel error: $e');
+        // If Key #1 hits rate limit / quota exceeded / error, automatically tries Key #2
       }
     }
 
-    throw lastError ?? Exception('Failed to generate questions from AI services.');
+    throw lastError ?? Exception('Failed to generate questions. Both primary and backup API keys failed.');
   }
 
   Future<List<QuizQuestion>> _callGeminiWithKey({
@@ -102,11 +115,12 @@ Generate a dynamic, non-repetitive, high-engagement set of exactly $count multip
 
 $guideline
 
-PEDAGOGICAL & DIVERSITY RULES:
-1. VARIETY GUARANTEE: Ensure every single question tests a DIFFERENT topic/competency within Grade $grade ${subject.displayName}. Do NOT repeat questions or ask about the same object twice.
+PEDAGOGICAL & SPEED RULES:
+1. VARIETY GUARANTEE: Ensure every single question tests a DIFFERENT topic/competency within Grade $grade ${subject.displayName}. Do NOT repeat questions.
 2. ACCURATE DIFFICULTY: Calibrate strictly to what is taught at Grade $grade level in Philippine schools.
 3. CLEAR OPTIONS: Provide 4 distinct options where only 1 is undeniably correct and 3 are plausible distractors.
-4. "keyword": Provide a specific 1-2 word visual noun matching the question's core subject (e.g. "philippine flag", "jose rizal", "carabao", "philippine eagle", "plant", "sun", "heart", "brain", "triangle", "apple", "fraction", "calendar", "rain", "puppy").
+4. "keyword": Provide a specific 1-2 word visual noun matching the question's core subject (e.g. "philippine flag", "jose rizal", "carabao", "plant", "heart", "triangle", "apple").
+5. "explanation": Keep concise (1 punchy sentence, max 20 words) for ultra-fast generation.
 
 Return ONLY a valid JSON array of question objects:
 [
@@ -121,7 +135,9 @@ Return ONLY a valid JSON array of question objects:
 ''';
 
 
-    final response = await model.generateContent([Content.text(prompt)]);
+    final response = await model
+        .generateContent([Content.text(prompt)])
+        .timeout(const Duration(seconds: 55));
     final responseText = response.text;
 
     if (responseText == null || responseText.trim().isEmpty) {
@@ -155,11 +171,18 @@ Return ONLY a valid JSON array of question objects:
           (item['correctIndex'] as num?)?.toInt() ??
           0;
 
+      final safeCorrectIndex = (correctIndex >= 0 && correctIndex < options.length) ? correctIndex : 0;
+      final correctAnswerText = options[safeCorrectIndex];
+
+      // Programmatically shuffle the 4 options so the correct answer is uniformly distributed among A, B, C, and D
+      final shuffledOptions = options.sublist(0, 4)..shuffle();
+      final newCorrectIndex = shuffledOptions.indexOf(correctAnswerText);
+
       results.add(QuizQuestion(
         id: 'ai_${DateTime.now().millisecondsSinceEpoch}_$i',
         prompt: item['prompt']?.toString().trim() ?? 'Question ${i + 1}',
-        options: options.sublist(0, 4),
-        correctIndex: (correctIndex >= 0 && correctIndex < 4) ? correctIndex : 0,
+        options: shuffledOptions,
+        correctIndex: newCorrectIndex >= 0 ? newCorrectIndex : 0,
         explanation: item['explanation']?.toString().trim() ?? 'Review this concept carefully.',
         imageKeyword: item['keyword']?.toString().trim(),
         subject: subject.displayName,

@@ -77,20 +77,14 @@ class QuizScreen extends ConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    width: 120,
-                    height: 120,
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withValues(alpha: 0.08),
-                      shape: BoxShape.circle,
-                    ),
-                    padding: const EdgeInsets.all(20),
+                  SizedBox(
+                    height: 220,
                     child: Image.asset(
                       AppAssets.mascotRobot,
                       fit: BoxFit.contain,
                       errorBuilder: (context, error, stackTrace) => const Icon(
                         Icons.auto_awesome_rounded,
-                        size: 48,
+                        size: 64,
                         color: AppColors.primary,
                       ),
                     ),
@@ -108,7 +102,7 @@ class QuizScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    'Crafting Grade ${quizState.grade} ${quizState.subject.displayName} (${quizState.difficulty.title})',
+                    'Crafting 20 dynamic questions for Grade ${quizState.grade} ${quizState.subject.displayName} (${quizState.difficulty.title})...',
                     style: AppTypography.bodyMd(color: AppColors.onSurfaceVariant),
                     textAlign: TextAlign.center,
                   ),
@@ -162,18 +156,40 @@ class QuizScreen extends ConsumerWidget {
 
                     // Title
                     Text(
-                      'Internet Connection Required',
+                      'AI Service or Internet Unavailable',
                       style: AppTypography.headlineMd(color: AppColors.onSurface),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 10),
 
-                    // Descriptive Explanation (Clean, Non-button look)
+                    // Descriptive Explanation
                     Text(
-                      'An active internet connection is required to generate dynamic AI questions. You can retry connecting or practice with our offline DepEd bank.',
+                      'Could not reach AI servers with available keys or no active connection. You can retry AI generation or practice without internet using our offline DepEd bank.',
                       style: AppTypography.bodyMd(color: AppColors.onSurfaceVariant),
                       textAlign: TextAlign.center,
                     ),
+
+                    if (quizState.errorMessage != null && quizState.errorMessage!.isNotEmpty) ...[
+                      const SizedBox(height: 12),
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: AppColors.surfaceContainerLow,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: AppColors.outline.withValues(alpha: 0.25),
+                          ),
+                        ),
+                        child: Text(
+                          quizState.errorMessage!,
+                          style: AppTypography.labelSm(color: AppColors.onSurfaceVariant).copyWith(fontSize: 11),
+                          textAlign: TextAlign.center,
+                          maxLines: 4,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
 
                     const SizedBox(height: 32),
 
@@ -413,8 +429,7 @@ class QuizScreen extends ConsumerWidget {
                   children: [
                     QuestionCard(
                       prompt: currentQuestion.prompt,
-                      imageKeyword: currentQuestion.imageKeyword,
-                      subject: currentQuestion.subject,
+                      questionIndex: quizState.currentIndex,
                     ),
                     const SizedBox(height: 16),
 

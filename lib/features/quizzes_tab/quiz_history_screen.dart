@@ -182,7 +182,7 @@ class QuizHistoryScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        'Complete a self-review session on the Learn tab to see your progress and past scores here!',
+                        'Complete a quiz session on the Learn tab to see your progress and past scores here!',
                         style: AppTypography.bodyMd(),
                         textAlign: TextAlign.center,
                       ),

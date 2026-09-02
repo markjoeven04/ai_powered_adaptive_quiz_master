@@ -54,11 +54,11 @@ class ActiveQuizNotifier extends StateNotifier<ActiveQuizState> {
         isOfflineFallbackPrompt: false,
       );
     } catch (e) {
-      // Offline / Generation Failed: Prompt user with Option to retry or practice offline
+      // All API keys failed or network disconnected: prompt user with option to retry or practice offline
       state = state.copyWith(
         isLoading: false,
         isOfflineFallbackPrompt: true,
-        errorMessage: 'Internet connection required to generate AI questions. Please connect to Wi-Fi or mobile data.',
+        errorMessage: e.toString(),
       );
     }
   }

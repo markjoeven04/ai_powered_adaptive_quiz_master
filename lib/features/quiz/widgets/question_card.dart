@@ -1,31 +1,25 @@
 import 'package:flutter/material.dart';
+import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_typography.dart';
-import '../../../core/services/image_service.dart';
 
 class QuestionCard extends StatelessWidget {
   final String prompt;
-  final String? imageKeyword;
-  final String subject;
+  final int questionIndex;
 
   const QuestionCard({
     super.key,
     required this.prompt,
-    this.imageKeyword,
-    required this.subject,
+    required this.questionIndex,
   });
 
   @override
   Widget build(BuildContext context) {
-    final imageUrls = ImageService.getEducationalImageUrls(
-      imageKeyword,
-      subject,
-      questionPrompt: prompt,
-    );
+    final mascotPoseAsset = AppAssets.getMascotPose(questionIndex);
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(22),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 22),
       decoration: BoxDecoration(
         color: AppColors.surfaceContainerLowest,
         borderRadius: BorderRadius.circular(24),
@@ -40,20 +34,46 @@ class QuestionCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          // 3D Mascot Pose Companion
+          Container(
+            width: 145,
+            height: 145,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white,
+              border: Border.all(
+                color: AppColors.primary.withValues(alpha: 0.15),
+                width: 2.5,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.primary.withValues(alpha: 0.08),
+                  blurRadius: 16,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: ClipOval(
+              child: Image.asset(
+                mascotPoseAsset,
+                fit: BoxFit.cover,
+                alignment: const Alignment(0, -0.2),
+                errorBuilder: (context, error, stackTrace) => const Icon(
+                  Icons.smart_toy_rounded,
+                  size: 56,
+                  color: AppColors.primary,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 18),
+
           // Prompt Text
           Text(
             prompt,
             style: AppTypography.headlineLg(color: AppColors.onSurface)
-                .copyWith(fontSize: 22, height: 1.3),
+                .copyWith(fontSize: 20, height: 1.35),
             textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 18),
-
-          // Contextual Educational Image Container
-          ResilientEducationalImage(
-            imageUrls: imageUrls,
-            subject: subject,
-            topicKeyword: imageKeyword,
           ),
         ],
       ),

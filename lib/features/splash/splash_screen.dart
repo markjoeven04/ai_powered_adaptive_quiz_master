@@ -133,11 +133,11 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                   RichText(
                     textAlign: TextAlign.center,
                     text: TextSpan(
-                      text: 'BrightSpark ',
+                      text: 'Bright Spark ',
                       style: AppTypography.headlineXl(color: AppColors.onSurface),
                       children: [
                         TextSpan(
-                          text: 'Self-Review',
+                          text: 'Quiz Master',
                           style: AppTypography.headlineXl(color: AppColors.primary),
                         ),
                       ],

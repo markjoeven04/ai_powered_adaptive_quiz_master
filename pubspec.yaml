@@ -1,5 +1,5 @@
 name: brightspark_self_review
-description: "BrightSpark Self-Review - AI-Powered Adaptive Quiz Master for K-12"
+description: "Bright Spark Quiz Master - AI-Powered Adaptive Quiz Master for K-12"
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -38,4 +38,5 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/images/mascot_poses/
     - assets/data/
